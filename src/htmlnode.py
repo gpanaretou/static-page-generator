@@ -27,3 +27,24 @@ class HtmlNode():
                 props.append(f" {key}=\"{value}\"")
 
             return "".join(props)
+        
+
+class LeafNode(HtmlNode):
+    def __init__(self, value, tag = None, props = None):
+        self.tag = tag
+        self.value = value
+        self.props = props
+        super()
+
+    def to_html(self):
+        if self.value == None:
+            raise ValueError("Leaf node requires a value!")
+            
+        if self.tag != None:
+            if self.props != None:
+                props = self.props_to_html()
+                return f"<{self.tag}{props}>{self.value}</{self.tag}>"
+            else:
+                return f"<{self.tag}>{self.value}</{self.tag}>"
+        else:
+            return f"{self.value}"
