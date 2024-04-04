@@ -1,26 +1,27 @@
 from textnode import TextNode
-from htmlnode import HtmlNode, LeafNode
+from htmlnode import HtmlNode, LeafNode, ParentNode
+
 
 def main():
     print("*** HI ***\n")
-    node = TextNode("This is a text node", "bold", "https://www.boot.dev")
-    html_node = HtmlNode(props = {"href": "https://www.google.com", "target": "_blank"})
 
-    print(html_node.props_to_html())
-    print(html_node)
+    node = ParentNode(
+        children=[
+            ParentNode(
+                children=[
+                    LeafNode("b", "1-1"),
+                ],
+                tag="p",
+            ),
+            LeafNode("b", "1"),
+            LeafNode(None, "2"),
+            LeafNode("i", "3"),
+            LeafNode(None, "4"),
+        ],
+        tag="p",
+    )
 
-    print("-- Leaf node")
-    l1_node = LeafNode("This is a paragraph of text.", "p")
-    l2_node = LeafNode("Click me!", "a", {"href": "https://www.google.com"})
-
-    print(l1_node.to_html())
-    print(l2_node.to_html())
-    
-    print("-- ")
-
-
-    print('\n')
-    print(node)
+    print(node.to_html())
 
     print("\n*** ByE ***")
 
