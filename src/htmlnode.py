@@ -27,7 +27,7 @@ class HtmlNode:
 
             return "".join(props)
         else:
-            return ''
+            return ""
 
 
 class LeafNode(HtmlNode):
@@ -74,7 +74,6 @@ class ParentNode(HtmlNode):
         tree = []
 
         tree.append(f"<{self.tag}{self.props_to_html()}>")
-
         for i in range(len(children)):
 
             child = children[i]
@@ -82,8 +81,8 @@ class ParentNode(HtmlNode):
             if isinstance(child, LeafNode):
                 tree.append(child.to_html())
             else:
-                tree.append(self.__connect_children(child.children))
+                tree.append(child.__connect_children(child.children))
 
         tree.append(f"</{self.tag}>")
 
-        return " ".join(tree)
+        return "".join(tree)

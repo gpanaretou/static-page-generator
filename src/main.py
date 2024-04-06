@@ -2,6 +2,7 @@ from textnode import TextNode
 from htmlnode import HtmlNode, LeafNode, ParentNode
 
 
+
 def main():
     print("*** HI ***\n")
 
@@ -21,8 +22,25 @@ def main():
         tag="p",
     )
 
-    print(node.to_html())
+    nested_node = ParentNode(
+            "p",
+            [
+                ParentNode(tag='span',
+                           children=[LeafNode(None, 'Nested')]),
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
 
+    # print(node.to_html())
+
+    # print(nested_node.to_html())
+
+    text_node = TextNode('test', 'text')
+    html_node = TextNode.text_node_to_html_node(text_node)
+    print(html_node)
     print("\n*** ByE ***")
 
 
