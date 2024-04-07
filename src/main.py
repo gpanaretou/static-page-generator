@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
 from htmlnode import HtmlNode, LeafNode, ParentNode
-from inline_markdown import InlineMarkdown
+from inline_markdown import *
 
 
 def main():
@@ -40,16 +40,35 @@ def main():
 
     text_node = TextNode('test', 'text')
     html_node = TextNode.text_node_to_html_node(text_node)
-    print(html_node)
+    # print(html_node)
 
     node1 = TextNode("This is text with a `code block` word", 'text')
     node2 = TextNode("This is text with a `code block` word", 'text')
 
 
-    new_nodes = InlineMarkdown.split_nodes_delimiter([node1, node2], "`", TextType.code.name)
+    text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+    # print(extract_markdown_images(text))
+    # [("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"), ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")]
 
-    for new_node in new_nodes:
-        print(new_node)
+    text = "This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and [another link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+    # print(extract_markdown_links(text))
+    # [("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"), ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")]
+
+
+
+    # new_nodes = InlineMarkdown.split_nodes_delimiter([node1, node2], "`", TextType.code.name)
+
+    # for new_node in new_nodes:
+    #     print(new_node)
+
+    node = TextNode(
+    "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+        'text',
+    )
+    new_nodes = split_nodes_image([node])
+
+    for node in new_nodes:
+        print(node)
 
     print("\n*** ByE ***")
 
