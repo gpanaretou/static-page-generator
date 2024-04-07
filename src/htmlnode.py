@@ -40,6 +40,14 @@ class LeafNode(HtmlNode):
     def __repr__(self):
         return f"LEAF_NODE ->TAG: {self.tag}, VALUE: {self.value}, PROPS: {self.props}"
 
+    def __eq__(self, node):
+        dict1 = self.__dict__
+        dict2 = node.__dict__
+        if dict1 == dict2:
+            return True
+        else:
+            return False
+        
     def to_html(self):
         if self.value is None:
             raise ValueError("Leaf node requires a value!")
