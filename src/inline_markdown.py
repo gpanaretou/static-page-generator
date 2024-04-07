@@ -94,3 +94,14 @@ def extract_markdown_links(text: str)-> list[tuple] | None:
         list_of_links.extend(t)
 
     return list_of_links
+
+def text_to_textnodes(text):
+    list_of_nodes = [TextNode(text=text, text_type='text')]
+
+    list_of_nodes = split_nodes_delimiter(list_of_nodes, '`', 'code')
+    list_of_nodes = split_nodes_delimiter(list_of_nodes, '**', 'bold')
+    list_of_nodes = split_nodes_delimiter(list_of_nodes, '*', 'italic')
+    list_of_nodes = split_nodes_image(list_of_nodes)
+    list_of_nodes = split_nodes_link(list_of_nodes)
+
+    return list_of_nodes
