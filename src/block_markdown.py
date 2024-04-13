@@ -1,5 +1,9 @@
 from enum import Enum
 
+from htmlnode import HtmlNode, ParentNode
+from textnode import TextNode
+from inline_markdown import *
+
 class BlockType(Enum):
     heading = '#'
     paragraph = ''
@@ -42,4 +46,29 @@ def block_to_block_type(block):
         return BlockType.ordered_list.name
     else:
         return BlockType.paragraph.name
-            
+
+def handle_paragraph_block(block):
+    parent_node = ParentNode('p')
+    return parent_node
+
+def wrap_block_with_appropriate_html_node(block_type, block):
+    if block_type == BlockType.paragraph.name:
+        return handle_paragraph_block(block)
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+
+    for block in blocks:
+        text_nodes = text_to_textnodes(block)
+        block_type = block_to_block_type(block)
+
+        parent_node = wrap_block_with_appropriate_html_node(block, block_type)
+
+        html_nodes = []
+        for node in text_nodes:
+            html_nodes.append(node.text_node_to_html_node())
+
+        parent_node.children = html_nodes
+        print(parent_node)
+
+        

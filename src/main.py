@@ -1,6 +1,7 @@
 from textnode import TextNode, TextType
 from htmlnode import HtmlNode, LeafNode, ParentNode
 from inline_markdown import *
+from block_markdown import *
 
 
 def main():
@@ -67,9 +68,8 @@ def main():
     )
     new_nodes = split_nodes_image([node])
 
-    for node in new_nodes:
-        print(node)
-
+    x = markdown_to_html_node(text)
+    print(x)
     print("\n*** ByE ***")
 
 
