@@ -48,28 +48,19 @@ def main():
 
 
     text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
-    # print(extract_markdown_images(text))
-    # [("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"), ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")]
 
     text = "This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and [another link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
-    # print(extract_markdown_links(text))
-    # [("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"), ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")]
 
 
+    ul = """ - First item
+- Second item
+- Third item
+- Fourth item"""
 
-    # new_nodes = InlineMarkdown.split_nodes_delimiter([node1, node2], "`", TextType.code.name)
-
-    # for new_node in new_nodes:
-    #     print(new_node)
-
-    node = TextNode(
-    "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
-        'text',
-    )
-    new_nodes = split_nodes_image([node])
-
-    x = markdown_to_html_node(text)
+    x = markdown_to_html_node(ul)
     print(x)
+
+
     print("\n*** ByE ***")
 
 

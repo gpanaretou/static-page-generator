@@ -55,6 +55,27 @@ def handle_quote_block(block, nodes: list):
     parent_node = ParentNode(tag='blockquote', children=nodes)
     return parent_node
 
+def handle_code_block(block, nodes: list):
+    code_node = ParentNode(tag='code', children=nodes)
+    parent_node = ParentNode(tag='pre', children=code_node)
+    return parent_node
+
+def handle_ul_node(block, nodes: list):
+    for node in nodes:
+        node.tag = 'li'
+        node.value = node.value.strip('*- ')
+
+    parent_node = ParentNode(tag='ul', children=nodes)
+    return parent_node
+
+def handle_ol_node(block, nodes: list):
+    for node in nodes:
+        node.tag = 'li'
+        node.value = node.value.strip('*- ')
+
+    parent_node = ParentNode(tag='ol', children=nodes)
+    return parent_node  
+
 def wrap_node_with_div(html_node):
     parent_node = ParentNode(tag='div', children=html_node)
     return parent_node
@@ -62,22 +83,35 @@ def wrap_node_with_div(html_node):
 
 def wrap_block_with_appropriate_html_node(block_type: str, block):
     html_nodes = []
-    text_nodes = text_to_textnodes(block)
+
+    text_nodes = []
+    for node in block.split('\n'):
+        text_nodes.append(text_to_textnodes(node))
 
     for node in text_nodes:
-        html_nodes.append(node.text_node_to_html_node())
+        print(node)
+        html_nodes.append(node[0].text_node_to_html_node())
 
     if block_type == BlockType.paragraph.name:
         return handle_paragraph_block(block, html_nodes)
+    elif block_type == BlockType.code.name:
+        return handle_code_block(block, html_nodes)
+    elif block_type == BlockType.quote.name:
+        return handle_quote_block(block, html_nodes)
+    elif block_type == BlockType.unordered_list.name:
+        return handle_ul_node(block, html_nodes)
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
+
+    for i, block in enumerate(blocks):
+        # print(i, " -> ", block)
+        pass
 
     for block in blocks:
         block_type = block_to_block_type(block)
 
         parent_node = wrap_block_with_appropriate_html_node(block_type, block)
         parent_node = wrap_node_with_div(parent_node)
-        print(parent_node)
 
         
