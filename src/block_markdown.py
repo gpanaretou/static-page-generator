@@ -47,28 +47,37 @@ def block_to_block_type(block):
     else:
         return BlockType.paragraph.name
 
-def handle_paragraph_block(block):
-    parent_node = ParentNode('p')
+def handle_paragraph_block(block, nodes: list):
+    parent_node = ParentNode(tag='p', children=nodes)
     return parent_node
 
-def wrap_block_with_appropriate_html_node(block_type, block):
+def handle_quote_block(block, nodes: list):
+    parent_node = ParentNode(tag='blockquote', children=nodes)
+    return parent_node
+
+def wrap_node_with_div(html_node):
+    parent_node = ParentNode(tag='div', children=html_node)
+    return parent_node
+
+
+def wrap_block_with_appropriate_html_node(block_type: str, block):
+    html_nodes = []
+    text_nodes = text_to_textnodes(block)
+
+    for node in text_nodes:
+        html_nodes.append(node.text_node_to_html_node())
+
     if block_type == BlockType.paragraph.name:
-        return handle_paragraph_block(block)
+        return handle_paragraph_block(block, html_nodes)
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
 
     for block in blocks:
-        text_nodes = text_to_textnodes(block)
         block_type = block_to_block_type(block)
 
-        parent_node = wrap_block_with_appropriate_html_node(block, block_type)
-
-        html_nodes = []
-        for node in text_nodes:
-            html_nodes.append(node.text_node_to_html_node())
-
-        parent_node.children = html_nodes
+        parent_node = wrap_block_with_appropriate_html_node(block_type, block)
+        parent_node = wrap_node_with_div(parent_node)
         print(parent_node)
 
         

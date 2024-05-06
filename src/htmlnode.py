@@ -38,7 +38,7 @@ class LeafNode(HtmlNode):
         super()
 
     def __repr__(self):
-        return f"LEAF_NODE ->TAG: {self.tag}, VALUE: {self.value}, PROPS: {self.props}"
+        return f"\nLEAF_NODE -> TAG: {self.tag}, VALUE: {self.value}, PROPS: {self.props}"
 
     def __eq__(self, node):
         dict1 = self.__dict__
@@ -76,7 +76,7 @@ class ParentNode(HtmlNode):
         return f"{children}"
 
     def __repr__(self):
-        return f"PARENT_NODE ->TAG: {self.tag}, CHILDREN: {self.children}, PROPS: {self.props}"
+        return f"PARENT_NODE ->TAG: {self.tag},\n\tCHILDREN: {self.children}, PROPS: {self.props}"
 
     def __connect_children(self, children):
         tree = []
