@@ -7,7 +7,7 @@ from inline_markdown import *
 class BlockType(Enum):
     heading = '#'
     paragraph = ''
-    code = '```'
+    code = '`'
     quote = '>'
     unordered_list_asterisk = '*'
     unordered_list_dash = '-'
@@ -30,11 +30,8 @@ def block_to_block_type(block):
         return BlockType.unordered_list.name
     elif first_char == BlockType.unordered_list_dash.value:
         return BlockType.unordered_list.name
-    
-    # check if it is code block
-    if len(block) < len(2 * BlockType.code.value):
-        if block[:3] == block[-3:] and block[:3] == BlockType.code.value:
-            return BlockType.code.name
+    elif first_char == BlockType.code.value:
+        return BlockType.code.name
         
     second_char = block[1]
     lines = block.split('\n')
@@ -89,7 +86,6 @@ def wrap_block_with_appropriate_html_node(block_type: str, block):
         text_nodes.append(text_to_textnodes(node))
 
     for node in text_nodes:
-        print(node)
         html_nodes.append(node[0].text_node_to_html_node())
 
     if block_type == BlockType.paragraph.name:
@@ -113,5 +109,6 @@ def markdown_to_html_node(markdown):
 
         parent_node = wrap_block_with_appropriate_html_node(block_type, block)
         parent_node = wrap_node_with_div(parent_node)
+    return parent_node
 
         

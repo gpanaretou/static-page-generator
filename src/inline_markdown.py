@@ -15,6 +15,9 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str) -> li
             continue
 
         split_text = node.text.split(f"{delimiter}")
+
+        split_text = list(filter(None, split_text))
+
         for text in split_text:
             if text[-1] != ' ' and text[0] != ' ' and len(split_text) != 1:
                 new_nodes.append(TextNode(text, text_type))

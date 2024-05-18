@@ -76,20 +76,23 @@ class ParentNode(HtmlNode):
         return f"{children}"
 
     def __repr__(self):
-        return f"PARENT_NODE ->TAG: {self.tag},\n\tCHILDREN: {self.children}, PROPS: {self.props}"
+        return f"\n->PARENT_NODE ->TAG: {self.tag},\n\t [-->CHILDREN: {self.children}], PROPS: {self.props}"
 
     def __connect_children(self, children):
         tree = []
 
         tree.append(f"<{self.tag}{self.props_to_html()}>")
-        for i in range(len(children)):
 
-            child = children[i]
-
-            if isinstance(child, LeafNode):
-                tree.append(child.to_html())
-            else:
-                tree.append(child.__connect_children(child.children))
+        if isinstance(children, ParentNode):
+            tree.append(children.__connect_children(children.children))
+        
+        else:
+            for i in range(len(children)):
+                child = children[i]
+                if isinstance(child, LeafNode):
+                    tree.append(child.to_html())
+                else:
+                    tree.append(child.__connect_children(child.children))
 
         tree.append(f"</{self.tag}>")
 
