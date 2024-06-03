@@ -4,7 +4,7 @@ from block_markdown import *
 from htmlnode import LeafNode, ParentNode
 
 class TestBlockMarkdown(unittest.TestCase):
-    def test_markdown__to_blocks(self):
+    def test_markdown_to_blocks(self):
         markdown = """This is **bolded** paragraph
 
 This is another paragraph with *italic* text and `code` here
@@ -86,6 +86,13 @@ This is the same paragraph on a new line
         expected_node = ParentNode(tag='ol', children=nodes)
 
         self.assertEqual(expected_node, new_node)
+
+    def test_heading_block(self):
+        node = [LeafNode(value='### Hello')]
+        expected = [LeafNode(tag='h3', value=node[0].value)]
+        actual = handle_heading_block(node)
+
+        self.assertEqual(expected, actual)
 
     def test_wrap_node_with_div(self):
         nodes = [

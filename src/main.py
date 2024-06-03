@@ -9,7 +9,7 @@ def main():
 
     block = "`This is a simple block of text`"
 
-    print(markdown_to_html_node(block).to_html())
+    print(markdown_to_html(block))
     
     print("\n*** ByE ***")
 
