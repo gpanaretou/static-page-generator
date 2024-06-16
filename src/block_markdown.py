@@ -1,13 +1,13 @@
 from enum import Enum
 
-from htmlnode import HtmlNode, ParentNode
+from htmlnode import HtmlNode, ParentNode, LeafNode
 from textnode import TextNode
 from inline_markdown import *
 
 class BlockType(Enum):
     heading = '#'
     paragraph = ''
-    code = '`'
+    code = '```'
     quote = '>'
     unordered_list_asterisk = '*'
     unordered_list_dash = '-'
@@ -30,7 +30,7 @@ def get_block_type(block: str)-> str:
         return BlockType.unordered_list.name
     elif first_char == BlockType.unordered_list_dash.value:
         return BlockType.unordered_list.name
-    elif first_char == BlockType.code.value and block[-1] == BlockType.code.value:
+    elif block[:3] == BlockType.code.value and block[-3:] == BlockType.code.value:
         return BlockType.code.name
     elif first_char == BlockType.heading.value:
         return BlockType.heading.name
@@ -98,10 +98,14 @@ def block_to_html(block: str):
     block_type = get_block_type(block)
     html_nodes = []
 
-    for node in block.split('\n'):
-        text_nodes = text_to_textnodes(node)
-        for text_node in text_nodes:
-            html_nodes.append(text_node.text_node_to_html_node())
+    if block_type == BlockType.code.name:
+        text_node = TextNode(text=block.lstrip('`').rstrip('`'), text_type='text')
+        html_nodes.append(text_node.text_node_to_html_node())
+    else:
+        for node in block.split('\n'):
+            text_nodes = text_to_textnodes(node)
+            for text_node in text_nodes:
+                html_nodes.append(text_node.text_node_to_html_node())
 
     if block_type == BlockType.paragraph.name:
         return handle_paragraph_block(html_nodes)

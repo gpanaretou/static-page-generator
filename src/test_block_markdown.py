@@ -123,12 +123,14 @@ This is the same paragraph on a new line
         self.assertEqual(expected_result, actual_result)
 
     def test_block_to_html_with_code_block(self):
-        block = "`This is the first line\nThis is the second line`"
+        block = "```This is the first line\nThis is the second line```"
         expected_result = ParentNode(
             'pre',
-            ParentNode('code', [LeafNode(value="This is the first line"), LeafNode(value="This is the second line")])
+            ParentNode('code', [LeafNode(value="This is the first line\nThis is the second line")])
         )
         actual_result = block_to_html(block)
+        print(actual_result)
+        print(expected_result)
         self.assertEqual(expected_result, actual_result)
 
     def test_block_to_html_with_ul_block(self):
