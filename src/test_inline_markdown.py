@@ -5,17 +5,15 @@ from textnode import TextType, TextNode
 
 class TestInlineMarkdown(unittest.TestCase):
     def test_split_node_delimiter_with_bold(self):
-        node1 = TextNode("This is text with a **bolded** word", 'text')
+        node1 = TextNode("This is text with a **bolded**, word", 'text')
 
         new_nodes = split_nodes_delimiter([node1], "**", TextType.bold.name)
 
         expected_result = [
             TextNode("This is text with a ", "text"),
             TextNode("bolded", "bold"),
-            TextNode(" word", "text"),
+            TextNode(", word", "text"),
         ]
-
-
         self.assertEqual(new_nodes, expected_result)
 
     def test_split_node_delimiter_with_italic(self):
@@ -28,8 +26,6 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode("italic", "italic"),
             TextNode(" word", "text"),
         ]
-
-
         self.assertEqual(new_nodes, expected_result)
 
     def test_split_node_delimiter_with_code(self):
@@ -42,7 +38,6 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode("code block", "code"),
             TextNode(" word", "text"),
         ]
-
         self.assertEqual(new_nodes, expected_result)
 
     def test_split_node_delimiter_with_bad_delimiter(self):

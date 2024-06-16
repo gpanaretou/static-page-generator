@@ -15,15 +15,16 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str) -> li
             continue
 
         split_text = node.text.split(f"{delimiter}")
-
         split_text = list(filter(None, split_text))
 
-        for text in split_text:
-            if text[-1] != ' ' and text[0] != ' ' and len(split_text) != 1:
-                new_nodes.append(TextNode(text, text_type))
-            else:
-                new_nodes.append(TextNode(text, 'text'))
-
+        if len(split_text) == 1:
+            new_nodes.append(TextNode(split_text[0], 'text'))
+        else:
+            for i in range(0, len(split_text)):
+                if i % 2 == 0:
+                    new_nodes.append(TextNode(split_text[i], 'text'))
+                else:
+                    new_nodes.append(TextNode(split_text[i], text_type))
     return new_nodes
 
 def split_nodes_image(old_nodes: list[TextNode])-> list[TextNode]:
