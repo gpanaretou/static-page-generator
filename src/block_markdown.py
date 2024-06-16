@@ -98,12 +98,10 @@ def block_to_html(block: str):
     block_type = get_block_type(block)
     html_nodes = []
 
-    text_nodes = []
     for node in block.split('\n'):
-        text_nodes.append(text_to_textnodes(node))
-
-    for node in text_nodes:
-        html_nodes.append(node[0].text_node_to_html_node())
+        text_nodes = text_to_textnodes(node)
+        for text_node in text_nodes:
+            html_nodes.append(text_node.text_node_to_html_node())
 
     if block_type == BlockType.paragraph.name:
         return handle_paragraph_block(html_nodes)
@@ -121,7 +119,12 @@ def block_to_html(block: str):
 def markdown_to_html(markdown: str)-> str:
     blocks = markdown_to_blocks(markdown)
 
+    list_of_children = []
+    ## TODO: this returns a duplicate div as the top level element, fix it
     for block in blocks:
-        parent_node = block_to_html(block)
-        parent_node = wrap_node_with_div(parent_node)
+        block_node = block_to_html(block)
+        block_node = wrap_node_with_div(block_node)
+        list_of_children.append(block_node)
+
+    parent_node = ParentNode(tag='div', children=list_of_children)
     return parent_node.to_html()
