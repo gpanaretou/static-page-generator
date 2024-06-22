@@ -44,7 +44,7 @@ def extract_title(markdown):
     first = markdown.partition('\n')[0]
 
     if first.startswith('# '):
-        return markdown_to_html(first)
+        return first
     else:
         raise Exception("The first line of the markdown file must be a # 1 heading!!")
 

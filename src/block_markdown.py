@@ -80,10 +80,12 @@ def handle_ol_node(nodes: list)-> ParentNode:
 def handle_heading_block(nodes: list)-> list:
     for node in nodes:
         value = node.value
+        node.value = value.strip('# ')
         for i in range(6,0,-1):
             pattern = rf'^\#{{{i}}}\s*'
             if re.match(pattern, value):
                 node.tag = f"h{i}"
+                node.value = node.value.replace(pattern, '')
                 break
 
     return nodes

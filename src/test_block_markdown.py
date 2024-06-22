@@ -89,7 +89,7 @@ This is the same paragraph on a new line
 
     def test_heading_block(self):
         node = [LeafNode(value='### Hello')]
-        expected = [LeafNode(tag='h3', value=node[0].value)]
+        expected = [LeafNode(tag='h3', value='Hello')]
         actual = handle_heading_block(node)
 
         self.assertEqual(expected, actual)
