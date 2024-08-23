@@ -1,6 +1,7 @@
 import unittest
 
 from inline_markdown import *
+from block_markdown import *
 from textnode import TextType, TextNode
 
 class TestInlineMarkdown(unittest.TestCase):
@@ -112,6 +113,19 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode(" and a ", 'text'),
             TextNode("link", 'link', "https://boot.dev"),
         ]
+
+        text = """1. An elaborate pantheon of deities (the `Valar` and `Maiar`)
+2. The tragic saga of the Noldor Elves
+3. The rise and fall of great kingdoms such as Gondolin and Númenor"""
+
+        print('This is a ->', get_block_type(text))
+
+        html_nodes = []
+        for node in text.split('\n'):
+            text_nodes = text_to_textnodes(node)
+            for text_node in text_nodes:
+                html_nodes.append(text_node.text_node_to_html_node())
+
 
         self.assertEqual(actual, expected)
 

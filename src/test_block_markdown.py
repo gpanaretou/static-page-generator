@@ -88,8 +88,9 @@ This is the same paragraph on a new line
         self.assertEqual(expected_node, new_node)
 
     def test_heading_block(self):
-        node = [LeafNode(value='### Hello')]
-        expected = [LeafNode(tag='h3', value='Hello')]
+        node = "## Heading1 with **bold** text"
+        lf = [LeafNode(value='Heading1 with '), LeafNode(tag='b', value='bold'), LeafNode(value=' text')]
+        expected = ParentNode(tag="h2", children=lf)
         actual = handle_heading_block(node)
 
         self.assertEqual(expected, actual)
@@ -122,6 +123,15 @@ This is the same paragraph on a new line
         actual_result = block_to_html(quote_block)
         self.assertEqual(expected_result, actual_result)
 
+    def test_block_to_html_with_heading_block(self):
+        quote_block = "## H1 **this is** a test"
+        expected_result = ParentNode(
+            'h2',
+            [LeafNode(value="H1 "), LeafNode(tag="b", value="this is"), LeafNode(value=" a test")]
+        )
+        actual_result = block_to_html(quote_block)
+        self.assertEqual(expected_result, actual_result)
+
     def test_block_to_html_with_code_block(self):
         block = "```This is the first line\nThis is the second line```"
         expected_result = ParentNode(
@@ -129,8 +139,6 @@ This is the same paragraph on a new line
             ParentNode('code', [LeafNode(value="This is the first line\nThis is the second line")])
         )
         actual_result = block_to_html(block)
-        print(actual_result)
-        print(expected_result)
         self.assertEqual(expected_result, actual_result)
 
     def test_block_to_html_with_ul_block(self):
