@@ -118,8 +118,6 @@ class TestInlineMarkdown(unittest.TestCase):
 2. The tragic saga of the Noldor Elves
 3. The rise and fall of great kingdoms such as Gondolin and Númenor"""
 
-        print('This is a ->', get_block_type(text))
-
         html_nodes = []
         for node in text.split('\n'):
             text_nodes = text_to_textnodes(node)

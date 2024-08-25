@@ -45,7 +45,7 @@ Tolkien's Middle-earth is a realm of breathtaking diversity and realism, brought
 
 At its heart, *The Lord of the Rings* is a timeless narrative of the perennial struggle between light and darkness, a theme that resonates deeply with the human experience. The saga explores:
 
-- The resilience of the human (and hobbit) spirit in the face of overwhelming odds
+- The resilience of the human (and hobbit) spirit in **the** face of overwhelming odds
 - The corrupting influence of power, epitomized by the One Ring
 - The importance of friendship, loyalty, and sacrifice
 

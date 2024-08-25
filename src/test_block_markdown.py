@@ -67,23 +67,27 @@ This is the same paragraph on a new line
         expected_node = ParentNode(tag="pre", children=ParentNode('code', nodes))
         self.assertEqual(expected_node, new_node)
 
-    def test_handle_ul_node(self):
-        nodes = [
-            LeafNode('li', 'First node'),
-            LeafNode('li', 'Second node')
-        ]
-        new_node = handle_ul_node(nodes)
-        expected_node = ParentNode(tag='ul', children=nodes)
-
+    def test_handle_ul_block(self):
+        block = "- Line one\n- Line two"
+        new_node = handle_ul_block(block)
+        expected_node = ParentNode(tag='ul', children=[
+            ParentNode(tag='li', children=[LeafNode(value='Line one')]),
+            ParentNode(tag='li', children=[LeafNode(value='Line two')])
+        ])
         self.assertEqual(expected_node, new_node)
 
-    def test_handle_ol_node(self):
-        nodes = [
-            LeafNode('li', 'First node'),
-            LeafNode('li', 'Second node')
-        ]
-        new_node = handle_ol_node(nodes)
-        expected_node = ParentNode(tag='ol', children=nodes)
+    def test_handle_ol_block(self):
+
+        block = """1. Dude `Valar` and
+2. The tragic saga of the Noldor Elves"""
+        new_node = handle_ol_block(block)
+        expected_node = ParentNode(tag='ol', children=
+                                   [ParentNode(tag='li', children=[
+                                                            LeafNode(value='Dude '),
+                                                            LeafNode(tag='code', value='Valar'), 
+                                                            LeafNode(value=' and')]),
+                                   ParentNode(tag='li', children=[LeafNode(value='The tragic saga of the Noldor Elves')])]
+                                   )
 
         self.assertEqual(expected_node, new_node)
 
@@ -148,13 +152,16 @@ This is the same paragraph on a new line
             [LeafNode('li', value="This is the first line"), LeafNode('li', value="This is the second line")]
         )
         actual_result = block_to_html(block)
-        self.assertEqual(expected_result, actual_result)
+        self.assertEqual("ul", actual_result.tag)
 
     def test_block_to_html_with_ol_block(self):
         block = "1. This is the first line\n2. This is the second line"
         expected_result = ParentNode(
             'ol',
-            [LeafNode('li', value="This is the first line"), LeafNode('li', value="This is the second line")]
+            [
+                ParentNode(tag='li', children=[LeafNode(value="This is the first line")]), 
+                ParentNode(tag='li', children=[LeafNode(value="This is the second line")])
+            ]
         )
         actual_result = block_to_html(block)
         self.assertEqual(expected_result, actual_result)

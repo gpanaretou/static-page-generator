@@ -56,22 +56,32 @@ def handle_code_block(nodes: list)-> ParentNode:
     parent_node = ParentNode(tag='pre', children=code_node)
     return parent_node
 
-def handle_ul_node(nodes: list)-> ParentNode:
-    for node in nodes:
-        node.tag = 'li'
-        node.value = node.value.strip('*- ')
+def handle_ul_block(block: str)-> ParentNode:
+    li_elements = []
+    for line in block.split('\n'):
+        text_nodes = text_to_textnodes(line.lstrip('*- '))
+        leaf_nodes = []
+        for t_node in text_nodes:
+            leaf_nodes.append(t_node.text_node_to_html_node())
+        li_elements.append(ParentNode(tag='li', children=leaf_nodes))
 
-    parent_node = ParentNode(tag='ul', children=nodes)
-    return parent_node
+    ul_element = ParentNode(tag='ul', children=li_elements)
+    return ul_element
 
-def handle_ol_node(nodes: list)-> ParentNode:
+def handle_ol_block(block: str)-> ParentNode:
     pattern = r'^\d+\.\s*'
-    for node in nodes:
-        node.tag = 'li'
-        node.value = re.sub(pattern, '', node.value)
 
-    parent_node = ParentNode(tag='ol', children=nodes)
-    return parent_node
+    li_elements = []
+    for line in block.split('\n'):
+        line = re.sub(pattern, '', line)
+        text_nodes = text_to_textnodes(line)
+        leaf_nodes = []
+        for t_node in text_nodes:
+            leaf_nodes.append(t_node.text_node_to_html_node())
+        li_elements.append(ParentNode(tag='li', children=leaf_nodes))
+
+    ol_element = ParentNode(tag='ol', children=li_elements)
+    return ol_element
 
 # TODO: These handle methods will probably have to change.
 # I don't like the way they are rn.
@@ -108,6 +118,10 @@ def block_to_html(block: str):
         html_nodes.append(text_node.text_node_to_html_node())
     elif block_type == BlockType.heading.name:
         return handle_heading_block(block)
+    elif block_type == BlockType.ordered_list.name:
+        return handle_ol_block(block)
+    elif block_type == BlockType.unordered_list.name:
+        return handle_ul_block(block)
         
     else:
         for node in block.split('\n'):
@@ -122,9 +136,7 @@ def block_to_html(block: str):
     elif block_type == BlockType.quote.name:
         return handle_quote_block(html_nodes)
     elif block_type == BlockType.unordered_list.name:
-        return handle_ul_node(html_nodes)
-    elif block_type == BlockType.ordered_list.name:
-        return handle_ol_node(html_nodes)
+        return handle_ul_block(html_nodes)
 
 def markdown_to_html(markdown: str)-> str:
     blocks = markdown_to_blocks(markdown)
@@ -133,7 +145,6 @@ def markdown_to_html(markdown: str)-> str:
     ## TODO: this returns a duplicate div as the top level element, fix it
     for block in blocks:
         block_node = block_to_html(block)
-        # block_node = wrap_node_with_div(block_node)
         list_of_children.append(block_node)
 
     parent_node = ParentNode(tag='div', children=list_of_children)
