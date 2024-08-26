@@ -9,19 +9,19 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str) -> li
         (delimiter == '*' and text_type is not TextType.italic.name):
         raise Exception("This delimiter is not supported by Markdown!")
 
-    for node in old_nodes:
+    for i, node in enumerate(old_nodes):
         if (node.text_type != TextType.text.name):
             new_nodes.append(node)
             continue
 
         split_text = node.text.split(f"{delimiter}")
-        split_text = list(filter(None, split_text))
+        matches = [split_text[i] for i in range(1, len(split_text), 2)]
 
         if len(split_text) == 1:
             new_nodes.append(TextNode(split_text[0], 'text'))
         else:
             for i in range(0, len(split_text)):
-                if i % 2 == 0:
+                if split_text[i] not in matches:
                     new_nodes.append(TextNode(split_text[i], 'text'))
                 else:
                     new_nodes.append(TextNode(split_text[i], text_type))
@@ -101,7 +101,6 @@ def extract_markdown_links(text: str)-> list[tuple] | None:
 
 def text_to_textnodes(text):
     list_of_nodes = [TextNode(text=text, text_type='text')]
-
     list_of_nodes = split_nodes_delimiter(list_of_nodes, '`', 'code')
     list_of_nodes = split_nodes_delimiter(list_of_nodes, '**', 'bold')
     list_of_nodes = split_nodes_delimiter(list_of_nodes, '*', 'italic')

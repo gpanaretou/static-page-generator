@@ -20,15 +20,15 @@ def markdown_to_blocks(markdown: str)-> list:
     return blocks
 
 def get_block_type(block: str)-> str:
-    first_char = block[0]
+    first = block.split()[0]
     
-    if first_char == BlockType.heading.value:
+    if set(first) == set(BlockType.heading.value) and len(set(first)) == 1:
         return BlockType.heading.name
-    elif first_char == BlockType.quote.value:
+    elif first == BlockType.quote.value: 
         return BlockType.quote.name
-    elif first_char == BlockType.unordered_list_asterisk.value:
+    elif first == BlockType.unordered_list_asterisk.value:
         return BlockType.unordered_list.name
-    elif first_char == BlockType.unordered_list_dash.value:
+    elif first == BlockType.unordered_list_dash.value:
         return BlockType.unordered_list.name
     elif block[:3] == BlockType.code.value and block[-3:] == BlockType.code.value:
         return BlockType.code.name
@@ -40,8 +40,13 @@ def get_block_type(block: str)-> str:
     else:
         return BlockType.paragraph.name
 
-def handle_paragraph_block(nodes: list)-> ParentNode:
-    parent_node = ParentNode(tag='p', children=nodes)
+def handle_paragraph_block(block: str)-> ParentNode:
+    t_nodes = text_to_textnodes(block)
+    leaf_nodes = []
+    for t in t_nodes:
+        leaf_nodes.append(t.text_node_to_html_node())
+
+    parent_node = ParentNode(tag='p', children=leaf_nodes)
     return parent_node
 
 def handle_quote_block(nodes: list)-> ParentNode:
@@ -83,8 +88,6 @@ def handle_ol_block(block: str)-> ParentNode:
     ol_element = ParentNode(tag='ol', children=li_elements)
     return ol_element
 
-# TODO: These handle methods will probably have to change.
-# I don't like the way they are rn.
 def handle_heading_block(block: str)-> ParentNode:
     h_order = 0
     for heading_order in range(6,0,-1):
@@ -114,7 +117,7 @@ def block_to_html(block: str):
 
     # each condition should be its own unit tested method
     if block_type == BlockType.code.name:
-        text_node = TextNode(text=block.lstrip('`').rstrip('`'), text_type='text')
+        text_node = TextNode(text=block.lstrip('`\n').rstrip('`'), text_type='text')
         html_nodes.append(text_node.text_node_to_html_node())
     elif block_type == BlockType.heading.name:
         return handle_heading_block(block)
@@ -122,21 +125,18 @@ def block_to_html(block: str):
         return handle_ol_block(block)
     elif block_type == BlockType.unordered_list.name:
         return handle_ul_block(block)
-        
+    elif block_type == BlockType.paragraph.name:
+        return handle_paragraph_block(block)
     else:
         for node in block.split('\n'):
             text_nodes = text_to_textnodes(node)
             for text_node in text_nodes:
                 html_nodes.append(text_node.text_node_to_html_node())
 
-    if block_type == BlockType.paragraph.name:
-        return handle_paragraph_block(html_nodes)
-    elif block_type == BlockType.code.name:
+    if block_type == BlockType.code.name:
         return handle_code_block(html_nodes)
     elif block_type == BlockType.quote.name:
         return handle_quote_block(html_nodes)
-    elif block_type == BlockType.unordered_list.name:
-        return handle_ul_block(html_nodes)
 
 def markdown_to_html(markdown: str)-> str:
     blocks = markdown_to_blocks(markdown)

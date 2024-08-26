@@ -22,7 +22,7 @@ This is the same paragraph on a new line
         self.assertEqual(actual, expected)
 
     def test_get_block_type(self):
-        blocks = ['>This is **bolded** paragraph',
+        blocks = ['> This is **bolded** paragraph',
                     'This is another paragraph with *italic* text and `code` here\nThis is the same paragraph on a new line',
                     "* This is a list\n* with items",
                     "# Heading",
@@ -38,15 +38,10 @@ This is the same paragraph on a new line
             self.assertEqual(expected[i], actual)
 
     def test_handle_paragraph_block(self):
-        nodes = [
-            LeafNode("b", "Bold text"),
-            LeafNode(None, "Normal text"),
-            LeafNode("i", "italic text"),
-            LeafNode(None, "Normal text"),
-        ]
+        text = "**this is** text."
 
-        new_node = handle_paragraph_block(nodes)
-        expected_node = ParentNode(tag="p", children=nodes)
+        new_node = handle_paragraph_block(text)
+        expected_node = ParentNode(tag="p", children=[LeafNode(tag="b", value="this is"), LeafNode(value=" text.")])
         self.assertEqual(expected_node, new_node)
 
     def test_handle_quote_block(self):
@@ -112,14 +107,13 @@ This is the same paragraph on a new line
         paragraph_block = "This is the first line\nThis is the second line"
         expected_result = ParentNode(
             'p',
-            [LeafNode(value="This is the first line"), LeafNode(value="This is the second line")]
+            [LeafNode(value="This is the first line\nThis is the second line")]
         )
-
         actual_result = block_to_html(paragraph_block)
         self.assertEqual(expected_result, actual_result)
 
     def test_block_to_html_with_quote_block(self):
-        quote_block = ">This is the first line\n>This is the second line"
+        quote_block = "> This is the first line\n> This is the second line"
         expected_result = ParentNode(
             'blockquote',
             [LeafNode(value="This is the first line"), LeafNode(value="This is the second line")]

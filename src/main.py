@@ -81,13 +81,7 @@ def main():
 
     copy_from_static_to_public()
     page = generate_page('./content/index.md', 'template.html', './public')
-    # print(page)
-
-
-
     print("\n*** ByE ***")
-
-
 
 if __name__ == "__main__":
     main()
