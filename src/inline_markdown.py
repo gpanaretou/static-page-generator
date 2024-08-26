@@ -14,7 +14,7 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str) -> li
             new_nodes.append(node)
             continue
 
-        split_text = node.text.split(f"{delimiter}")
+        split_text = node.text.split(delimiter)
         matches = [split_text[i] for i in range(1, len(split_text), 2)]
 
         if len(split_text) == 1:

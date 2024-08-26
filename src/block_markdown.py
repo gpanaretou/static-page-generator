@@ -64,7 +64,11 @@ def handle_code_block(nodes: list)-> ParentNode:
 def handle_ul_block(block: str)-> ParentNode:
     li_elements = []
     for line in block.split('\n'):
-        text_nodes = text_to_textnodes(line.lstrip('*- '))
+        if line[0] is BlockType.unordered_list_asterisk.value:
+            text_nodes = text_to_textnodes(line.lstrip('* '))
+        else:
+            text_nodes = text_to_textnodes(line.lstrip('- '))
+
         leaf_nodes = []
         for t_node in text_nodes:
             leaf_nodes.append(t_node.text_node_to_html_node())
@@ -124,6 +128,7 @@ def block_to_html(block: str):
     elif block_type == BlockType.ordered_list.name:
         return handle_ol_block(block)
     elif block_type == BlockType.unordered_list.name:
+        print(block)
         return handle_ul_block(block)
     elif block_type == BlockType.paragraph.name:
         return handle_paragraph_block(block)

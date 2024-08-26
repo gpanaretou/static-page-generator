@@ -1,5 +1,6 @@
 import os
 import shutil
+import pathlib
 
 from textnode import TextNode, TextType
 from htmlnode import HtmlNode, LeafNode, ParentNode
@@ -50,8 +51,8 @@ def extract_title(markdown):
 
 def generate_page(from_path, template_path, dest_path):
 
-    print(os.path.dirname(dest_path))
     if not os.path.isdir(os.path.dirname(dest_path)):
+        print('-Creating necessary directories for: ', dest_path)
         os.makedirs(os.path.dirname(dest_path))
 
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
@@ -73,14 +74,34 @@ def generate_page(from_path, template_path, dest_path):
     with open(f"{dest_path}/{from_path.split('/')[-1].split('.')[0]}.html", "w") as html_file:
         html_file.write(page_content)
 
-    return page_content
+    return
+
+def generate_pages_recursively(dir_content_path, template_path, dest_dir_path):
+    for f in os.listdir(dir_content_path):
+        path_from = os.path.join(dir_content_path, f)
+        path_to = os.path.join(dest_dir_path)
+
+        if os.path.isfile(path_from):
+            generate_page(path_from, template_path, path_to)
+        else:
+            new_dir_path = os.path.join(path_to, f)
+            print('\n')
+
+            if not os.path.isdir(new_dir_path):
+                print('-Creating necessary directories for: ', new_dir_path)
+                os.makedirs(new_dir_path)
+
+            generate_pages_recursively(path_from, template_path, new_dir_path)
+    return
+
+
 
 
 def main():
     print("*** HI ***\n")
 
     copy_from_static_to_public()
-    page = generate_page('./content/index.md', 'template.html', './public')
+    page = generate_pages_recursively('./content', 'template.html', './public')
     print("\n*** ByE ***")
 
 if __name__ == "__main__":
