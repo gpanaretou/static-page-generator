@@ -50,3 +50,15 @@ Lastly, to make sure everything works out:
 `
 python --version
 `
+
+## HOW TO USE
+
+1. Place markdown files in the `./content` directory.
+2. Place any images used in the markddown files in the `./static/images` directory.
+3. Run `./main.sh` from the main directory
+4. Visit `localhost:8888` for the page.
+
+## How to make changes in styling
+
+`Template.html` is the structure the generated html pages will have.
+You can change the styling of the template by editing the `./static/index.css`

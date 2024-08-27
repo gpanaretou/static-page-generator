@@ -128,7 +128,6 @@ def block_to_html(block: str):
     elif block_type == BlockType.ordered_list.name:
         return handle_ol_block(block)
     elif block_type == BlockType.unordered_list.name:
-        print(block)
         return handle_ul_block(block)
     elif block_type == BlockType.paragraph.name:
         return handle_paragraph_block(block)
